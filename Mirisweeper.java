@@ -214,8 +214,8 @@ public class Mirisweeper implements ActionListener {
                             }
                         }
                         JOptionPane.showMessageDialog(null,"Sorry, You Lost :(.",":(",JOptionPane.PLAIN_MESSAGE);
-                        System.exit(0);
                         frame.dispose();
+                        System.exit(0);
                     }
                 }
             }
