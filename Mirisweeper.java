@@ -8,7 +8,7 @@ public class Mirisweeper implements ActionListener {
     static final int SIZE = 10; // edit this number for a bigger board
     //note: setting the SIZE too low might create bugs.
 
-    static final int MINES_COUNT = (SIZE*3)/2;
+    static final int MINES_COUNT = SIZE*2;
     static final int BOMB = 9;
 
     static boolean firstInput = true;
@@ -35,7 +35,7 @@ public class Mirisweeper implements ActionListener {
         Mirisweeper instance = new Mirisweeper();
 
         frame.setLocationRelativeTo(null);
-        frame.setSize(715,740);
+        frame.setSize(715,739);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(null);
         frame.setResizable(false);
@@ -60,7 +60,7 @@ public class Mirisweeper implements ActionListener {
 
         setPlayArea(playArea);
         System.out.println("SIZE: " + SIZE);
-        System.out.println("Bomb count: " + (MINES_COUNT-1));
+        System.out.println("Bomb count: " + (MINES_COUNT));
 
     }
 
@@ -139,7 +139,7 @@ public class Mirisweeper implements ActionListener {
         }
 
         for (int i = 0; i < MINES_COUNT; i++) {
-            while (bombExclusionZone[x][y] == 1) {
+            while (bombExclusionZone[x][y] == 1 || gameMatrix[x][y] == BOMB) {
                 x = randomizeValues();
                 y = randomizeValues();
             }
@@ -188,6 +188,19 @@ public class Mirisweeper implements ActionListener {
         }
     }
 
+    public static void printMatrix(int[][] gameMatrix) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (gameMatrix[i][j] == BOMB) {
+                    System.out.print("B  ");
+                }
+                else
+                    System.out.print(gameMatrix[i][j] + "  ");
+            }
+            System.out.println();
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         for (int i = 0; i < SIZE; i++) {
@@ -199,6 +212,7 @@ public class Mirisweeper implements ActionListener {
                         firstInput = false;
                         placeBombs(gameMatrix, input);
                         evaluateBoard(gameMatrix);
+                        printMatrix(gameMatrix);
                     }
                     openZeros(gameMatrix,input);
                     openNumbers(gameMatrix);
@@ -226,7 +240,7 @@ public class Mirisweeper implements ActionListener {
 
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                if (isChecked[i][j] == 1) {
+                if (isChecked[i][j] == 1 && gameMatrix[i][j] != BOMB) {
                     counter++;
                 }
             }
