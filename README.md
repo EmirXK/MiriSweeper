@@ -1,4 +1,4 @@
-# Mirisweeper_1.1_GUI
+# Mirisweeper_1.2_GUI
 Minesweeper in Java that has a GUI.
 
 Run PreGame.java to play the game.
@@ -16,3 +16,9 @@ Run PreGame.java to play the game.
   Fixed a bug where not enough mines would be placed on the board.
   
   The numbers are now colored.
+
+- Ver 1.2:
+
+  Introduced flags
+  
+  Added a label to display the number of mines and the number of flags placed.
