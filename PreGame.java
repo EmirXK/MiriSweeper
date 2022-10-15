@@ -1,4 +1,7 @@
+package miriSweeper;
+
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -34,6 +37,8 @@ public class PreGame implements ActionListener {
             buttons[i] = new JButton(buttonNames[i]);
             buttons[i].setBounds(i*100,0,100,50);
             buttons[i].addActionListener(instance);
+            buttons[i].setBackground(new Color(0xA1A1A1));
+            buttons[i].setFocusable(false);
             frame.add(buttons[i]);
         }
         frame.setVisible(true);

@@ -1,12 +1,14 @@
+package miriSweeper;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
-public class MiriSweeper extends PreGame implements ActionListener {
+public class MiriSweeper extends PreGame implements ActionListener, MouseListener {
 
     static final int BUTTON_SIZE = 50;
     static final int PANEL_SIZE = BUTTON_SIZE * SIZE;
+    static final int DISPLAYPANEL_SIZE = 60;
 
     static final int MINES_COUNT = (SIZE*SIZE)/5;
     static final int BOMB = 9;
@@ -16,6 +18,8 @@ public class MiriSweeper extends PreGame implements ActionListener {
     static int[][] playArea = new int[SIZE + 2][SIZE + 2];
 
     static int[][] isChecked = new int[SIZE][SIZE];
+
+    static int[][] isColored = new int[SIZE][SIZE];
 
     static int[][] bombExclusionZone = new int[SIZE][SIZE];
 
@@ -29,29 +33,49 @@ public class MiriSweeper extends PreGame implements ActionListener {
 
     static JFrame frame = new JFrame();
 
+    static JLabel label;
+
+    static int flagNum = 0;
+
 
     MiriSweeper() {
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        panel.setPreferredSize(new Dimension(PANEL_SIZE, PANEL_SIZE));
+        JPanel mainPanel = new JPanel();
+        mainPanel.setPreferredSize(new Dimension(PANEL_SIZE,PANEL_SIZE + DISPLAYPANEL_SIZE));
+        mainPanel.setBackground(Color.black);
 
-        frame.setLocationRelativeTo(null);
+        label = new JLabel();
+        label.setBounds(0,PANEL_SIZE,PANEL_SIZE,DISPLAYPANEL_SIZE);
+        label.setText("Flags Placed: " + flagNum + "/" + MINES_COUNT);
+        label.setFont(new Font("Comic Sans MS",Font.BOLD,30));
+        label.setForeground(new Color(0xFFFFFF));
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(SIZE,SIZE));
+        panel.setPreferredSize(new Dimension(PANEL_SIZE, PANEL_SIZE));
+        panel.setBounds(0,0,PANEL_SIZE,PANEL_SIZE);
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setTitle("MiriSweeper");
 
-        for (int i = 0; i < SIZE+1; i++) {
-            for (int j = 0; j < SIZE+1; j++) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
                 buttons[i][j] = new JButton();
                 buttons[i][j].setBounds(BUTTON_SIZE*j,BUTTON_SIZE*i,BUTTON_SIZE,BUTTON_SIZE);
                 buttons[i][j].addActionListener(this);
+                buttons[i][j].addMouseListener(this);
                 buttons[i][j].setBackground(new Color(0xA1A1A1));
+                buttons[i][j].setFocusable(false);
                 panel.add(buttons[i][j]);
             }
         }
-        frame.add(panel);
+        mainPanel.add(panel);
+        mainPanel.add(label);
+        frame.add(mainPanel);
         frame.pack();
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
         frame.setVisible(true);
 
         gameMatrix = new int[SIZE][SIZE];
@@ -200,34 +224,37 @@ public class MiriSweeper extends PreGame implements ActionListener {
         }
     }
 
+    // Left Click Actions
     @Override
     public void actionPerformed(ActionEvent e) {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 if (e.getSource() == buttons[i][j]) {
-                    input[0] = i;
-                    input[1] = j;
-                    if (firstInput) {
-                        firstInput = false;
-                        placeBombs(gameMatrix, input);
-                        evaluateBoard(gameMatrix);
-                    }
-                    openZeros(gameMatrix,input);
-                    openNumbers(gameMatrix);
-                    isChecked[i][j] = 1;
-                    displayGUI();
-                    if (gameMatrix[i][j] == BOMB) {
-                        for (int k = 0; k < SIZE; k++) {
-                            for (int l = 0; l < SIZE; l++) {
-                                if (gameMatrix[k][l] == BOMB) {
-                                    buttons[k][l].setText("B");
-                                    buttons[k][l].setBackground(new Color(0xFF0000));
+                    if (isColored[i][j] != 1) {
+                        input[0] = i;
+                        input[1] = j;
+                        if (firstInput) {
+                            firstInput = false;
+                            placeBombs(gameMatrix, input);
+                            evaluateBoard(gameMatrix);
+                        }
+                        openZeros(gameMatrix,input);
+                        openNumbers(gameMatrix);
+                        isChecked[i][j] = 1;
+                        displayGUI();
+                        if (gameMatrix[i][j] == BOMB) {
+                            for (int k = 0; k < SIZE; k++) {
+                                for (int l = 0; l < SIZE; l++) {
+                                    if (gameMatrix[k][l] == BOMB) {
+                                        buttons[k][l].setText("B");
+                                        buttons[k][l].setBackground(Color.red);
+                                    }
                                 }
                             }
+                            JOptionPane.showMessageDialog(null,"Sorry, You Lost :(.",":(",JOptionPane.PLAIN_MESSAGE);
+                            frame.dispose();
+                            System.exit(0);
                         }
-                        JOptionPane.showMessageDialog(null,"Sorry, You Lost :(.",":(",JOptionPane.PLAIN_MESSAGE);
-                        frame.dispose();
-                        System.exit(0);
                     }
                 }
             }
@@ -247,12 +274,58 @@ public class MiriSweeper extends PreGame implements ActionListener {
             for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE; j++) {
                     if (gameMatrix[i][j] == BOMB) {
-                        buttons[i][j].setBackground(new Color(0xFF0000));
+                        buttons[i][j].setBackground(new Color(0x690000));
                     }
                 }
             }
             JOptionPane.showMessageDialog(null,"YOU WIN!! CONGRATS!!.",":)",JOptionPane.PLAIN_MESSAGE);
             frame.dispose();
         }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+
+    // Right Click Actions
+    @Override
+    public void mousePressed(MouseEvent e) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    if (e.getSource() == buttons[i][j]) {
+                        if (isChecked[i][j] != 1) {
+                            if (isColored[i][j] == 1) {
+                                buttons[i][j].setBackground(new Color(0xA1A1A1));
+                                flagNum--;
+                                isColored[i][j] = 0;
+                            } else {
+                                buttons[i][j].setBackground(new Color(0x690000));
+                                isColored[i][j] = 1;
+                                flagNum++;
+                            }
+                            label.setText("Flags Placed: " + flagNum + "/" + MINES_COUNT);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }
