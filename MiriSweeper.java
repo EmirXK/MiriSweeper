@@ -99,6 +99,11 @@ public class MiriSweeper extends PreGame implements ActionListener, MouseListene
                     if (playArea[m][n] == 1) {
                         if (gameMatrix[m-1][n-1] == 0) {
                             if (isChecked[m - 1][n - 1] == 0) {
+                                if (isColored[m-1][n-1] == 1) {
+                                    isColored[m-1][n-1] = 0;
+                                    flagNum--;
+                                    label.setText("Flags Placed: " + flagNum + "/" + MINES_COUNT);
+                                }
                                 isChecked[m - 1][n - 1] = 1;
                                 temp[0] = m-1;
                                 temp[1] = n-1;
@@ -120,6 +125,11 @@ public class MiriSweeper extends PreGame implements ActionListener, MouseListene
                     for (int m = k-1; m < k+2; m++) {
                         for (int n = l-1; n < l+2; n++) {
                             if (playArea[m][n] == 1) {
+                                if (isColored[m-1][n-1] == 1) {
+                                    isColored[m-1][n-1] = 0;
+                                    flagNum--;
+                                    label.setText("Flags Placed: " + flagNum + "/" + MINES_COUNT);
+                                }
                                 isChecked[m-1][n-1] = 1;
                             }
                         }
