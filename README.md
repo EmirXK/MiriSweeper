@@ -24,4 +24,4 @@ Run PreGame.java to play the game.
   Added a label to display the number of mines and the number of flags placed.
   
   
-![Screenshot_1](https://user-images.githubusercontent.com/92262991/216819042-f67fa691-75b5-4957-ab1f-0f7e6b240afd.jpg)
+  ![Screenshot_1](https://user-images.githubusercontent.com/92262991/216819042-f67fa691-75b5-4957-ab1f-0f7e6b240afd.jpg)
