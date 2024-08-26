@@ -1,27 +1,29 @@
-# Mirisweeper_1.2_GUI
-Minesweeper in Java that has a GUI.
+# Mirisweeper 1.2 GUI
 
-Run PreGame.java to play the game.
+**Minesweeper in Java with a graphical user interface.**
 
-- Release:
- 
-   Your first click always opens a new compartment. (you can't die on the first click)
-   
-   There are no flags in this version.
-    
-- Ver 1.1: 
- 
-  You can now choose the difficulty of the game. (Easy, Default{Custom}, Hard)
-  
-  Fixed a bug where not enough mines would be placed on the board.
-  
-  The numbers are now colored.
+## How to Play
 
-- Ver 1.2:
+Run `PreGame.java` to start the game.
 
-  Introduced flags
-  
-  Added a label to display the number of mines and the number of flags placed.
-  
-  
-  ![Screenshot_1](https://user-images.githubusercontent.com/92262991/216819042-f67fa691-75b5-4957-ab1f-0f7e6b240afd.jpg)
+## Features
+
+### General
+
+- **First Click Safety**: Your first click will always open a safe compartment, ensuring you don't hit a mine on your initial move.
+- **No Flags (Version 1.0)**: The initial version did not include flagging mechanics.
+
+### Version 1.1
+
+- **Difficulty Levels**: Choose from three difficulty levels—Easy, Default (Custom), and Hard.
+- **Bug Fix**: Resolved an issue where insufficient mines were placed on the board.
+- **Colored Numbers**: Numbers representing the count of adjacent mines are now color-coded for easier identification.
+
+### Version 1.2
+
+- **Flagging Mechanic**: Flags have been introduced, allowing you to mark suspected mine locations.
+- **Mine and Flag Counter**: A label displays the total number of mines on the board and the number of flags you've placed.
+
+## Screenshot
+
+![Game Screenshot](https://user-images.githubusercontent.com/92262991/216819042-f67fa691-75b5-4957-ab1f-0f7e6b240afd.jpg)
